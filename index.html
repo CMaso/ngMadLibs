@@ -1,0 +1,87 @@
+<!doctype HTML>
+<html lang="en" ng-app="myApp">
+	<head>
+		<title>ngMadLibs</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" href="style.css" type="text/css" />
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+		<script src="fitText.js"></script>
+	</head>
+		<!-- Note problems with lag when typing inside inputs. DLed AngularJS batarang, watched short tutorial at https://www.youtube.com/watch?v=q-7mhcHXSfM -->
+		<!-- https://docs.angularjs.org/api/ng/directive/input -->
+	<body>
+		<div id="container"><!-- Placing ng-controller="myCtrl" in this div tag was causing much lag typing in inputs -->
+			<header><div id="faceDiv"><img id="happyFaceImg" src="img/mad-lib-happy-face.png" />
+			</div><div id="logoDiv"><img id="logoImg" src="img/ng-mad-libs-logo.png" />
+			<span id="logoText">Automate This!</span></div></header>
+		<div ng-controller="myCtrl">
+			<section id="inputs" ng-hide="submitted">
+				<section id="errorMessages" ng-cloak> <!-- ng-cloak is not working, codeflash still happens -->
+					<p class="errorMsg" ng-show="formLibChoices.nonsenseWord.$invalid && formLibChoices.nonsenseWord.$touched">Nonsense Word is required and can't be longer than 50</p>
+					<p class="errorMsg" ng-show="formLibChoices.adj1.$invalid && formLibChoices.adj1.$touched">Adjective is required and cannot be longer than 50</p>
+					<p class="errorMsg" ng-show="formLibChoices.adj2.$invalid && formLibChoices.adj2.$touched">Adjective is required and cannot be longer than 50</p>
+					<p class="errorMsg" ng-show="formLibChoices.plNoun1.$invalid && formLibChoices.plNoun1.$touched">Plural Noun is required and cannot be longer than 50</p>
+					<p class="errorMsg" ng-show="formLibChoices.substance.$invalid && formLibChoices.substance.$touched">Substance is required and cannot be longer than 50</p>
+					<p class="errorMsg" ng-show="formLibChoices.liquid.$invalid && formLibChoices.liquid.$touched">Liquid is required and cannot be longer than 50</p>
+					<p class="errorMsg" ng-show="formLibChoices.ism.$invalid && formLibChoices.ism.$touched">Ism is required and must end with "ism" and cannot be longer than 50</p>
+					<p class="errorMsg" ng-show="formLibChoices.plNoun2.$invalid && formLibChoices.plNoun2.$touched">Plural Noun is required and cannot be longer than 50</p>
+					<p class="errorMsg" ng-show="formLibChoices.verbIng.$invalid && formLibChoices.verbIng.$touched">"Ing verb" is required and must end with "ing" and cannot be longer than 50</p>
+					<p class="errorMsg" ng-show="formLibChoices.number.$invalid && formLibChoices.number.$touched">Number is required and must be a number</p>
+					<p class="errorMsg" ng-show="formLibChoices.bodyPart.$invalid && formLibChoices.bodyPart.$touched">Body part is required and cannot be longer than 50</p>
+					<p class="errorMsg" ng-show="formLibChoices.verb2.$invalid && formLibChoices.verb2.$touched">Verb is required and cannot be longer than 50</p>
+					<p class="errorMsg" ng-show="formLibChoices.noun_y.$invalid && formLibChoices.noun_y.$touched">'Y' noun is required and cannot be longer than 50</p>
+					<p class="errorMsg" ng-show="formLibChoices.adverb.$invalid && formLibChoices.adverb.$touched">Adverb is required and must end with 'ly' and cannot be longer than 50</p>
+					<p class="errorMsg" ng-show="formLibChoices.verbIng2.$invalid && formLibChoices.verbIng2.$touched">"Ing verb" is required and must end with "ing" and cannot be longer than 50</p>
+					<p class="errorMsg" ng-show="formLibChoices.plNoun3.$invalid && formLibChoices.plNoun3.$touched">Plural noun is required and must end with "ing" and cannot be longer than 50</p>
+					<p class="errorMsg" ng-show="formLibChoices.verb3.$invalid && formLibChoices.verb3.$touched">Verb is required and cannot be longer than 50</p>
+					<p class="errorMsg" ng-show="formLibChoices.substance2.$invalid && formLibChoices.substance2.$touched">Substance is required and cannot be longer than 50</p>
+					<p class="errorMsg" ng-show="formLibChoices.plNoun4.$invalid && formLibChoices.plNoun4.$touched">Substance is required and cannot be longer than 50</p>
+					<p class="errorMsg" ng-show="formLibChoices.noun1.$invalid && formLibChoices.noun1.$touched">Noun is required and cannot be longer than 50</p>
+				</section>
+				
+				<form novalidate name="formLibChoices" ng-submit="doSubmit(formLibChoices.$valid)">
+					<input name="nonsenseWord" type="text" ng-model="data.nonsenseWord" placeholder="Nonsense Word" ng-maxlength="50" required>
+					<input name="adj1" type="text" ng-model="data.adj1" placeholder="Adjective" ng-maxlength="50" required>
+					<input name="adj2" name="adj2"  type="text" ng-model="data.adj2" placeholder="Adjective" ng-maxlength="50" required>
+					<input name="plNoun1" type="text" ng-model="data.plNoun1" placeholder="Plural Noun" ng-maxlength="50" required>
+					<input name="substance" type="text" ng-model="data.substance" placeholder="Substance" ng-maxlength="50" required>
+					<input name="liquid" type="text" ng-model="data.liquid" placeholder="Liquid" ng-maxlength="50" required>
+					<input name="ism" type="text" ng-model="data.ism" placeholder="An 'ism'" ng-pattern="/.*ism$/" ng-maxlength="50" required>
+					<input name="plNoun2" type="text" ng-model="data.plNoun2" placeholder="Plural Noun" ng-maxlength="50" required>
+					<input name="verbIng" type="text" ng-model="data.verbIng" placeholder="'ing' Verb" ng-pattern="ingPattern" ng-maxlength="50" required><!-- /.*ing$/ (note need of starting and ending forward slashes) -->
+					<input name="number" type="text" type="text" ng-model="data.number" placeholder="Number" ng-pattern="numPattern" required><!-- /^[0-9]+([.][0-9]+)?$/ -->
+					<input name="bodyPart" type="text" ng-model="data.bodyPart" placeholder="Body Part" ng-maxlength="50" required>
+					<input name="verb2" type="text" ng-model="data.verb2" placeholder="Verb" ng-maxlength="50" required>
+					<input name="noun_y"" type="text" ng-model="data.noun_y" placeholder="'y' Noun" ng-pattern="/.*y$/" ng-maxlength="50" required>
+					<input name="adverb" type="text" ng-model="data.adverb" placeholder="Adverb" ng-pattern="/.*ly$/" ng-maxlength="50" required>
+					<input name="verbIng2" type="text" ng-model="data.verbIng2" placeholder="'ing' Verb" ng-pattern="ingPattern" ng-maxlength="50" required><!-- /.*ing$/ -->
+					<input name="data.plNoun3" type="text" ng-model="data.plNoun3" placeholder="Plural Noun" ng-maxlength="50" required>
+					<input name="data.verb3" type="text" ng-model="data.verb3" placeholder="Verb" ng-maxlength="50" required>
+					<input name="data.substance2" type="text" ng-model="data.substance2" placeholder="Substance" ng-maxlength="50" required>
+					<input name="data.plNoun4" type="text" ng-model="data.plNoun4" placeholder="Plural Noun" ng-maxlength="50" required>
+					<input name="data.noun1" type="text" ng-model="data.noun1" placeholder="Noun" ng-maxlength="50" required>
+					<br style="clear:left;" />
+					<br />
+					<hr class="fancy-line" />
+					<button type="submit" value="generate" class="myButton" ng-disabled="formLibChoices.$invalid">Generate My Mad Lib</button>
+					<br style="clear:right;" />
+				</form>
+			</section>
+			<section id="lib" ng-show="submitted" ng-cloak>
+				<p>Here at {{data.nonsenseWord}}.com we're not your typical {{data.adj1}} start-up. Sure, we're a small, motivated team of {{data.adj2}} geeks, who pride ourselves on our in-depth technical knowledge of {{data.plNoun1}}, and our kitchen is always stocked with plenty of free {{data.substance}} and {{data.liquid}}, but it's really our environment of {{data.ism}} that sets us apart from other {{data.plNoun2}} in the industry. We are dedicated to {{data.verbIng}} our customers into the {{data.number|suffix}} century. We hold your {{data.bodyPart}} for as long as you need, until you feel confident you can {{data.verb2}} each and every one of your customers, every time.</p>
+				<p>Because it's not about us using the latest, sexiest {{data.noun_y}} just because we can. It's about {{data.adverb}} bringing you one step closer to {{data.verbIng2}} your company's goals. Or even two, or three. It's about helping you get ahead of your {{data.plNoun3}}, so you can {{data.verb3}} as a company, providing more {{data.substance2}} to your customers and spending less of your hard-earned {{data.plNoun4}} to do it.
+				<p>{{data.nonsenseWord}}.com. Your {{data.noun1}}, our {{data.noun1}}!</p>
+				<button ng-click="startOver()" class="myButton">Start Over</button>
+				<br style="clear:right;" />
+			</section>
+		</div>
+		</div>
+
+		<script>
+			$("#logoDiv").fitText();
+		</script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
+		<script src="myApp.js"></script>
+	</body>
+</html>
